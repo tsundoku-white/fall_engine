@@ -25,16 +25,12 @@ This is a small engine the is written in cpp 23, this is just for fun.
 - [ ] Texture loading
       
 ## Build
-
 ```bash
+git clone https://github.com/tsundoku-white/fall_engine.git
 cd fall_engine
-mkdir build && cd build
-nix develop
-cmake ..
-make
-./app
+nix develop --command ./build.sh
 ```
 
 ## Notes
-- Nix is used for reproducible package management — run `nix develop` before configuring with CMake to enter the dev shell with all dependencies available.
 - Requires a Vulkan-capable GPU and up-to-date drivers.
+- Run `nix develop` before CMake to enter the dev shell with all dependencies.
