@@ -1,6 +1,6 @@
 #include "vulkan_context.h"
 
-namespace helix {
+namespace Engine {
 
   const std::vector<char const*> Vulkan_Context::validationLayers = {
     "VK_LAYER_KHRONOS_validation"

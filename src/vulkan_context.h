@@ -15,7 +15,7 @@
 
 #include "platform.h"
 
-namespace helix {
+namespace Engine {
 
   class Vulkan_Context
   {

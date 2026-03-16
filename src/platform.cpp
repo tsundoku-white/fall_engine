@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <cmath>
 
-namespace helix {
+namespace Engine {
 
   Platform::Platform(void)
   {

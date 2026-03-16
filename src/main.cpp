@@ -1,23 +1,18 @@
 #include "platform.h"
 #include "vulkan_context.h"
-#include "render.h"
-#include <cstdio>
-#include <print>
+#include "drivers/render.h"
 
-int main(int argc, char *argv[])
+int main()
 {
-  helix::Platform platform;
-  helix::Vulkan_Context vulkan_ctx(platform);
-  helix::Render render(vulkan_ctx, platform);
+    Engine::Platform platform;
+    Engine::Vulkan_Context ctx(platform);
 
-  while (!platform.should_close())
-  {
-    platform.pollevents(); 
+    Engine::Render render(ctx, platform);
 
-    if (platform.input_pressed(GLFW_KEY_F3)) break;
+    while (!platform.should_close()) {
+        platform.pollevents();
+        render.pass();
+    }
 
-    //float foo = platform.input_vector2(GLFW_KEY_A, GLFW_KEY_D, platform.delta);
-    //std::printf("value: %f\n", foo);
-    render.pass();
-  }
+    return 0;
 }

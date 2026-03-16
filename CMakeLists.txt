@@ -26,9 +26,13 @@ find_path(STB_INCLUDE_DIR
 # Source files
 set(SOURCES
     src/main.cpp
-    src/platform.cpp 
+    src/platform.cpp
     src/vulkan_context.cpp
-    src/render.cpp
+    src/drivers/render.cpp
+    src/drivers/swapchain.cpp
+    src/drivers/pipeline.cpp
+    src/drivers/commands.cpp
+    src/drivers/sync.cpp
 )
 
 # Create executable

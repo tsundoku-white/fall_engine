@@ -8,7 +8,7 @@
 #include <glm/vec2.hpp>
 #include <print>
 
-namespace helix {
+namespace Engine {
 
   enum WindowMode {
     WindowModeFullscreen,
