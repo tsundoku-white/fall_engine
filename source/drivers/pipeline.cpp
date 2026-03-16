@@ -1,7 +1,4 @@
 #include "pipeline.h"
-#include "drivers/types.h"
-#include <print>
-#include <stdexcept>
 
 namespace Engine {
 
@@ -35,8 +32,8 @@ void Pipeline::create(VkDevice device, VkRenderPass render_pass, VkExtent2D exte
 {
     m_device = device;
 
-    auto vert_code = readFile("src/drivers/shaders/vert.spv");
-    auto frag_code = readFile("src/drivers/shaders/frag.spv");
+    auto vert_code = readFile("../build/src/drivers/shaders/vert.spv");
+    auto frag_code = readFile("../build/src/drivers/shaders/frag.spv");
 
     VkShaderModule vert_module = createShaderModule(vert_code);
     VkShaderModule frag_module = createShaderModule(frag_code);

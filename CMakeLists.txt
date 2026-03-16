@@ -18,11 +18,6 @@ find_path(GLM_INCLUDE_DIR
         /usr/local/include
 )
 
-find_path(STB_INCLUDE_DIR
-    NAMES stb_image.h
-    PATHS /usr/include /usr/local/include
-)
-
 # Source files
 set(SOURCES
     source/main.cpp
@@ -84,7 +79,7 @@ endif()
 find_program(GLSLC glslc REQUIRED)
 
 file(GLOB_RECURSE GLSL_SOURCES
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/drivers/shaders/*.glsl"
+    "${CMAKE_CURRENT_SOURCE_DIR}/source/drivers/shaders/*.glsl"
 )
 
 set(SPIRV_OUTPUT_DIR "${CMAKE_BINARY_DIR}/src/drivers/shaders")

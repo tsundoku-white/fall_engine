@@ -38,6 +38,7 @@
             vulkan-loader
             vulkan-validation-layers
             glm
+            stb
             
             xorg.libX11
             xorg.libXrandr
