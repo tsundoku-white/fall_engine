@@ -10,11 +10,10 @@ configure() {
 
 build() {
     cmake --build "$BUILD_DIR" --parallel
-    sleep 1
 }
 
 run() {
-    "./$BUILD_DIR/$TARGET"
+    cd "$BUILD_DIR" && ./app
 }
 
 echo "What do you want to do?"
