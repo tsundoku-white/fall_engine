@@ -5,6 +5,16 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# After your find_package calls, add:
+include(FetchContent)
+
+FetchContent_Declare(cgltf
+    GIT_REPOSITORY https://github.com/jkuhlmann/cgltf.git
+    GIT_TAG v1.14
+)
+FetchContent_MakeAvailable(cgltf)
+target_include_directories(${PROJECT_NAME} PRIVATE ${cgltf_SOURCE_DIR})
+
 # Find required packages
 find_package(glfw3 REQUIRED)
 find_package(Vulkan REQUIRED)

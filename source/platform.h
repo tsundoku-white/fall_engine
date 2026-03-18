@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include <cstdint>
 #include <glm/vec2.hpp>
+#include "common.h"
 #include <print>
 
 namespace Engine {
@@ -22,7 +23,7 @@ namespace Engine {
       Platform(void);
       ~Platform(void);
 
-      double delta = 0;
+      f64 delta = 0;
 
       void set_window_mode(WindowMode new_window_mode);
       bool should_close(void);
@@ -30,16 +31,16 @@ namespace Engine {
 
       GLFWwindow *get_handle(void);
 
-      bool input_pressed(int key);
-      bool input_released(int key);
-      float input_vector2(int key_a, int key_b, double dt);
-      glm::vec2 input_mouse_dt();
-      glm::vec2 input_mouse_location();
+      b8 input_pressed(int key);
+      b8 input_released(int key);
+      f32 input_vector2(int key_a, int key_b, f64 dt);
+      vec2 input_mouse_dt();
+      vec2 input_mouse_location();
 
     private:
       struct WindowState {
-        uint32_t width  = 600;
-        uint32_t height = 450;
+        u32 width  = 600;
+        u32 height = 450;
         int x           = 100;
         int y           = 100;
       };
@@ -53,10 +54,10 @@ namespace Engine {
       GLFWwindow *m_handle     = nullptr;
       GLFWmonitor *m_monitor   = nullptr;
 
-      double m_last_time = 0;
-      float m_axis_value = 0.0f;
-      double m_mouse_last_x = 0.0;
-      double m_mouse_last_y = 0.0;
-      bool   m_mouse_first  = true;
+      f64 m_last_time = 0;
+      f32 m_axis_value = 0.0f;
+      f64 m_mouse_last_x = 0.0;
+      f64 m_mouse_last_y = 0.0;
+      b8  m_mouse_first  = true;
   };
 }

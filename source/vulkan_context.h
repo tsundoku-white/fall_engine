@@ -14,6 +14,7 @@
 #include <vulkan/vulkan_core.h>
 
 #include "platform.h"
+#include "common.h"
 
 namespace Engine {
 
@@ -22,9 +23,9 @@ namespace Engine {
     public:
       struct QueueFamilyIndices
       {
-        std::optional<uint32_t> graphicsFamily;
-        std::optional<uint32_t> presentFamily;
-        bool isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
+        std::optional<u32> graphicsFamily;
+        std::optional<u32> presentFamily;
+        b8 isComplete() { return graphicsFamily.has_value() && presentFamily.has_value(); }
       };
 
       struct SwapChainSupportDetails

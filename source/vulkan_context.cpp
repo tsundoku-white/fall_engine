@@ -11,21 +11,21 @@ namespace Engine {
   };
 
 #ifdef NDEBUG
-  constexpr bool enableValidationLayers = false;
+  constexpr b8 enableValidationLayers = false;
 #else
-  constexpr bool enableValidationLayers = true;
+  constexpr b8 enableValidationLayers = true;
 #endif
 
-  bool Vulkan_Context::checkValidationLayerSupport() {
+  b8 Vulkan_Context::checkValidationLayerSupport() {
 
-    uint32_t layerCount = 0;
+    u32 layerCount = 0;
     vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
     std::vector<VkLayerProperties> availableLayers(layerCount);
     vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
     for (const char* layerName : validationLayers) {
-      bool layerFound = false;
+      b8 layerFound = false;
 
       for (const auto& layerProperties : availableLayers) {
         if (strcmp(layerName, layerProperties.layerName) == 0) {
@@ -43,7 +43,7 @@ namespace Engine {
   }
 
   std::vector<const char*> getRequiredExtensions() {
-    uint32_t glfwExtensionCount = 0;
+    u32 glfwExtensionCount = 0;
     const char** glfwExtensions;
     glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
@@ -87,7 +87,7 @@ namespace Engine {
   Vulkan_Context::QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device) {
     Vulkan_Context::QueueFamilyIndices indices;
 
-    uint32_t queueFamilyCount = 0;
+    u32 queueFamilyCount = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
 
     std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
@@ -109,7 +109,7 @@ namespace Engine {
 
   Vulkan_Context::QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device, VkSurfaceKHR surface) {
     Vulkan_Context::QueueFamilyIndices indices;
-    uint32_t count = 0;
+    u32 count = 0;
     vkGetPhysicalDeviceQueueFamilyProperties(device, &count, nullptr);
     std::vector<VkQueueFamilyProperties> families(count);
     vkGetPhysicalDeviceQueueFamilyProperties(device, &count, families.data());
@@ -156,11 +156,11 @@ namespace Engine {
     createInfo.pApplicationInfo        = &appInfo;
 
     auto extensions = getRequiredExtensions();
-    createInfo.enabledExtensionCount = static_cast<uint32_t>(extensions.size());
+    createInfo.enabledExtensionCount = static_cast<u32>(extensions.size());
     createInfo.ppEnabledExtensionNames = extensions.data();
 
     if (enableValidationLayers) {
-      createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+      createInfo.enabledLayerCount = static_cast<u32>(validationLayers.size());
       createInfo.ppEnabledLayerNames = validationLayers.data();
     } else {
       createInfo.enabledLayerCount = 0;
@@ -172,7 +172,7 @@ namespace Engine {
 
     std::printf("available extensions\n");
 
-    uint32_t extensionCount = 0;
+    u32 extensionCount = 0;
     vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
     std::vector<VkExtensionProperties> availableExtensions(extensionCount);
     vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, availableExtensions.data());
@@ -197,7 +197,7 @@ namespace Engine {
 
   void Vulkan_Context::pickPhysicalDevice()
   {
-    uint32_t deviceCount = 0;
+    u32 deviceCount = 0;
     vkEnumeratePhysicalDevices(m_instance, &deviceCount, nullptr);
     if (deviceCount == 0) {
       std::printf("failed to find GPUs with Vulkan support!\n");
@@ -227,15 +227,15 @@ namespace Engine {
     m_queue_families = findQueueFamilies(m_physical_device, m_surface);
     QueueFamilyIndices indices = m_queue_families;
 
-    float queuePriority = 1.0f;
+    f32 queuePriority = 1.0f;
 
-    std::set<uint32_t> uniqueFamilies = {
+    std::set<u32> uniqueFamilies = {
       indices.graphicsFamily.value(),
       indices.presentFamily.value()
     };
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-    for (uint32_t family : uniqueFamilies) {
+    for (u32 family : uniqueFamilies) {
       VkDeviceQueueCreateInfo queueCreateInfo{};
       queueCreateInfo.sType            = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
       queueCreateInfo.queueFamilyIndex = family;
@@ -248,13 +248,13 @@ namespace Engine {
     VkDeviceCreateInfo createInfo{};
     createInfo.sType                   = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
     createInfo.pQueueCreateInfos       = queueCreateInfos.data();
-    createInfo.queueCreateInfoCount    = static_cast<uint32_t>(queueCreateInfos.size());
+    createInfo.queueCreateInfoCount    = static_cast<u32>(queueCreateInfos.size());
     createInfo.pEnabledFeatures        = &deviceFeatures;
-    createInfo.enabledExtensionCount   = static_cast<uint32_t>(deviceExtensions.size());
+    createInfo.enabledExtensionCount   = static_cast<u32>(deviceExtensions.size());
     createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
     if (enableValidationLayers) {
-      createInfo.enabledLayerCount   = static_cast<uint32_t>(validationLayers.size());
+      createInfo.enabledLayerCount   = static_cast<u32>(validationLayers.size());
       createInfo.ppEnabledLayerNames = validationLayers.data();
     } else {
       createInfo.enabledLayerCount = 0;

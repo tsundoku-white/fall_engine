@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include "../common.h"
 #include "../vulkan_context.h"
 #include <GLFW/glfw3.h>
 #include <vector>

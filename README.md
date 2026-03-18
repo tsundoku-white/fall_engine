@@ -25,11 +25,8 @@ This is a small engine the is written in cpp 23, this is just for fun.
 - [ ] Texture loading
       
 ## Build
-```bash
-git clone https://github.com/tsundoku-white/fall_engine.git
-cd fall_engine
-nix develop --command ./build.sh
-```
+See the [build](build.md) file for manual build instructions, 
+or run `install.sh` for automatic setup.
 
 ## Notes
 - Requires a Vulkan-capable GPU and up-to-date drivers.
