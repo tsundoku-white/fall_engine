@@ -1,8 +1,0 @@
-/home/chris/fall_engine/build/CMakeFiles/app.dir
-/home/chris/fall_engine/build/CMakeFiles/shaders.dir
-/home/chris/fall_engine/build/CMakeFiles/edit_cache.dir
-/home/chris/fall_engine/build/CMakeFiles/rebuild_cache.dir
-/home/chris/fall_engine/build/CMakeFiles/list_install_components.dir
-/home/chris/fall_engine/build/CMakeFiles/install.dir
-/home/chris/fall_engine/build/CMakeFiles/install/local.dir
-/home/chris/fall_engine/build/CMakeFiles/install/strip.dir
