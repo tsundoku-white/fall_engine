@@ -17,6 +17,7 @@ public:
     ~Render();
 
 private:
+    Platform*     m_platform       = nullptr;
     VkDevice     m_device         = VK_NULL_HANDLE;
     VkQueue      m_graphics_queue = VK_NULL_HANDLE;
     VkQueue      m_present_queue  = VK_NULL_HANDLE;

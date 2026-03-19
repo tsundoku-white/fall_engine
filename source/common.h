@@ -2,6 +2,7 @@
 
 #include <cstdint> 
 #include <glm/common.hpp>
+#include <string>
 #include <vector>
 
 // Unsigned integers
@@ -29,4 +30,5 @@ using vec2 = glm::vec2;
 using vec3 = glm::vec3;
 using mat4 = glm::mat4;
 
+using string = std::string;
 

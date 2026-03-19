@@ -10,12 +10,13 @@ class Swapchain {
 public:
     void create(VkDevice device, VkPhysicalDevice physical_device,
                 VkSurfaceKHR surface, GLFWwindow* window,
-                Vulkan_Context& ctx);
+                Vulkan_Context &ctx, Platform &platform);
     void destroy();
     ~Swapchain() { destroy(); }
 
     void create_image_views();
     void create_framebuffers(VkRenderPass render_pass);
+    void recreate_swapchain();
 
     VkSwapchainKHR                  handle()      const { return m_swapchain; }
     VkFormat                        format()      const { return m_format; }
@@ -28,7 +29,10 @@ private:
     VkDevice         m_device          = VK_NULL_HANDLE;
     VkPhysicalDevice m_physical_device = VK_NULL_HANDLE;
     VkSurfaceKHR     m_surface         = VK_NULL_HANDLE;
+    VkRenderPass     m_render_pass      = VK_NULL_HANDLE;
+    Vulkan_Context*  m_ctx              = nullptr;
     GLFWwindow*      m_window          = nullptr;
+    Platform*        m_platform        = nullptr;
 
     VkSwapchainKHR             m_swapchain = VK_NULL_HANDLE;
     std::vector<VkImage>       m_images;

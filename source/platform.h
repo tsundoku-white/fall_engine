@@ -24,6 +24,7 @@ namespace Engine {
       ~Platform(void);
 
       f64 delta = 0;
+      b8 framebuffer_resized = false;
 
       void set_window_mode(WindowMode new_window_mode);
       bool should_close(void);
@@ -50,6 +51,7 @@ namespace Engine {
 
       const char *m_title      = "Helix";
       WindowMode m_window_mode = WindowModeWindowed;
+
 
       GLFWwindow *m_handle     = nullptr;
       GLFWmonitor *m_monitor   = nullptr;

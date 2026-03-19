@@ -4,7 +4,8 @@
 
 namespace Engine {
 
-const std::vector<Vertex> vertices = {
+  // triangle vertex pos
+  const std::vector<Vertex> vertices = {
     // Bottom-left
     {{-0.5f, -0.5f, 0.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
     // Bottom-right  
@@ -13,35 +14,39 @@ const std::vector<Vertex> vertices = {
     {{ 0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f}},
     // Top-left
     {{-0.5f,  0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
-};
+  };
 
-// Indices for two triangles forming the square
-const std::vector<uint32_t> indices = {
+  // Indices for two triangles forming the square
+  const std::vector<uint32_t> indices = {
     0, 1, 2,  // First triangle (bottom-left, bottom-right, top-right)
     0, 2, 3   // Second triangle (bottom-left, top-right, top-left)
-};
- 
-Render::Render(Vulkan_Context& ctx, Platform& platform)
-{
+  };
+
+  // creating the render pass prerecusits
+  Render::Render(Vulkan_Context& ctx, Platform& platform)
+  {
+    // storing ref 
+    m_platform       = &platform;
     m_device         = ctx.get_device();
     m_graphics_queue = ctx.get_graphics_queue();
     m_present_queue  = ctx.get_present_queue();
- 
+
     m_swapchain.create(m_device, ctx.get_physical_device(),
-                       ctx.get_surface(), platform.get_handle(), ctx);
+        ctx.get_surface(), platform.get_handle(), ctx, platform);
     m_swapchain.create_image_views();
     create_render_pass();
     m_pipeline.create(m_device, m_render_pass, m_swapchain.extent());
     m_swapchain.create_framebuffers(m_render_pass);
     m_commands.create(m_device, ctx.get_queue_families().graphicsFamily.value());
     m_mesh.create(ctx.get_physical_device(), m_device,
-                  m_commands.pool(), m_graphics_queue,
-                  vertices, indices);
+        m_commands.pool(), m_graphics_queue,
+        vertices, indices);
     m_sync.create(m_device, m_swapchain.image_count());
-}
+  }
 
-void Render::create_render_pass()
-{
+  // attaching swapchain format and getting dependencies
+  void Render::create_render_pass()
+  {
     VkAttachmentDescription color_attachment{};
     color_attachment.format         = m_swapchain.format();
     color_attachment.samples        = VK_SAMPLE_COUNT_1_BIT;
@@ -79,34 +84,37 @@ void Render::create_render_pass()
     create_info.pDependencies   = &dependency;
 
     if (vkCreateRenderPass(m_device, &create_info, nullptr, &m_render_pass) != VK_SUCCESS)
-        throw std::runtime_error("failed to create render pass");
+      throw std::runtime_error("failed to create render pass");
 
     std::print("[render] render pass created\n");
-}
+  }
 
-void Render::pass()
-{
+  void Render::pass()
+  {
+    // getting current frame and storring in unsighed int 32 (u32)
     u32 frame = m_sync.current_frame();
 
+    // setting reffrances to frame in flight and buffer in the current frame
     VkFence         fence  = m_sync.in_flight(frame);
     VkCommandBuffer cmd    = m_commands.buffer(frame);
 
+    // waiting for everything to sync 
     vkWaitForFences(m_device, 1, &fence, VK_TRUE, UINT64_MAX);
     vkResetFences(m_device, 1, &fence);
 
     u32 image_index;
     vkAcquireNextImageKHR(m_device, m_swapchain.handle(), UINT64_MAX,
-                          m_sync.image_available(frame), VK_NULL_HANDLE, &image_index);
+        m_sync.image_available(frame), VK_NULL_HANDLE, &image_index);
 
     m_commands.reset(frame);
-m_commands.record(frame, m_render_pass,
-                  m_swapchain.framebuffer(image_index),
-                  m_swapchain.extent(),
-                  m_pipeline.handle(),
-                  m_mesh);
+    m_commands.record(frame, m_render_pass,
+        m_swapchain.framebuffer(image_index),
+        m_swapchain.extent(),
+        m_pipeline.handle(),
+        m_mesh);
 
     VkSemaphore wait_semaphores[]      = { m_sync.image_available(frame) };
-    VkSemaphore signal_semaphores[] = { m_sync.render_finished(image_index) }; 
+    VkSemaphore signal_semaphores[]    = { m_sync.render_finished(image_index) }; 
     VkPipelineStageFlags wait_stages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
 
     VkSubmitInfo submit_info{};
@@ -120,8 +128,9 @@ m_commands.record(frame, m_render_pass,
     submit_info.pSignalSemaphores    = signal_semaphores;
 
     if (vkQueueSubmit(m_graphics_queue, 1, &submit_info, fence) != VK_SUCCESS)
-        throw std::runtime_error("failed to submit draw command buffer");
+      throw std::runtime_error("failed to submit draw command buffer");
 
+    // atttaching swapchain
     VkSwapchainKHR swapchains[] = { m_swapchain.handle() };
     VkPresentInfoKHR present_info{};
     present_info.sType              = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -131,16 +140,30 @@ m_commands.record(frame, m_render_pass,
     present_info.pSwapchains        = swapchains;
     present_info.pImageIndices      = &image_index;
 
-    vkQueuePresentKHR(m_present_queue, &present_info);
+    // recreating the swapchain on window resize
+    VkResult result = vkQueuePresentKHR(m_present_queue, &present_info);
 
+    if (result == VK_ERROR_OUT_OF_DATE_KHR ||
+        result == VK_SUBOPTIMAL_KHR || m_platform->framebuffer_resized)
+    {
+      m_platform->framebuffer_resized = false;
+      m_swapchain.recreate_swapchain();
+    }
+    else if (result != VK_SUCCESS) {
+      throw std::runtime_error("failed to present");
+    }
+
+    // sync onece more and setup for frames and flight as well as creating more frames
     m_sync.advance_frame();
-}
 
-Render::~Render()
-{
+  }
+
+  Render::~Render()
+  {
+    // wait for vulkan to finish current frame the kill render
     vkDeviceWaitIdle(m_device);
     m_mesh.destroy();
     vkDestroyRenderPass(m_device, m_render_pass, nullptr);
-}
+  }
 
 } // namespace Engine

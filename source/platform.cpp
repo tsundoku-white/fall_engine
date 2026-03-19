@@ -27,7 +27,13 @@ namespace Engine {
     m_windowed.y = (mode->height - m_current.height) / 2;
     glfwSetWindowPos(m_handle, m_windowed.x, m_windowed.y);
 
-    std::print("[0] Platform has been successfully created\n");
+    glfwSetWindowUserPointer(m_handle, this);
+    glfwSetFramebufferSizeCallback(m_handle, [](GLFWwindow* window, int, int) {
+        auto* p = static_cast<Platform*>(glfwGetWindowUserPointer(window));
+        p->framebuffer_resized = true;
+        });
+
+    std::print("[Platform] created\n");
   }
 
   Platform::~Platform(void)
@@ -87,7 +93,7 @@ namespace Engine {
     if (glfwGetKey(m_handle, key_a) == GLFW_PRESS) target -= 1.0f;
     if (glfwGetKey(m_handle, key_b) == GLFW_PRESS) target += 1.0f;
 
-    f32 speed = 10.0f; // higher = snappier
+    f32 speed = 10.0f; 
     m_axis_value = std::lerp(m_axis_value, target, speed * (f32)dt);
 
     if (std::abs(m_axis_value - target) < 0.01f)

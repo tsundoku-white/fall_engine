@@ -5,8 +5,8 @@
 int main()
 {
     Engine::Platform platform;
+    platform.set_window_mode(Engine::WindowModeWindowed);
     Engine::Vulkan_Context ctx(platform);
-
     Engine::Render render(ctx, platform);
 
     while (!platform.should_close()) {

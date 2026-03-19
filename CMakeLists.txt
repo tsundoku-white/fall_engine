@@ -18,17 +18,32 @@ find_path(GLM_INCLUDE_DIR
         /usr/local/include
 )
 
+include(FetchContent)
+
+FetchContent_Declare(
+    cgltf
+    GIT_REPOSITORY https://github.com/jkuhlmann/cgltf.git
+    GIT_TAG        v1.14
+    GIT_SHALLOW    TRUE
+)
+
+FetchContent_MakeAvailable(cgltf) 
+
+
 # Source files
 set(SOURCES
-    source/main.cc
-    source/vulkan_context.cc
-    source/platform.cc
-    source/drivers/render.cc
-    source/drivers/swapchain.cc
-    source/drivers/pipeline.cc
-    source/drivers/buffer.cc
-    source/drivers/commands.cc
-    source/drivers/sync.cc
+    source/main.cpp
+    source/vulkan_context.cpp
+    source/platform.cpp 
+
+    source/drivers/render.cpp
+    source/drivers/swapchain.cpp
+    source/drivers/pipeline.cpp
+    source/drivers/buffer.cpp
+    source/drivers/commands.cpp
+    source/drivers/sync.cpp
+
+    #source/assets/model.cpp #not yet finished
 )
 
 # Create executable
@@ -43,6 +58,8 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
     <memory>
     <array>
     <span>
+    <iostream>
+    <print>
 )
 
 # Include directories
@@ -53,6 +70,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${Vulkan_INCLUDE_DIRS}
     ${GLM_INCLUDE_DIR}
     ${STB_INCLUDE_DIR}
+    ${cgltf_SOURCE_DIR}
 )
 
 # Link libraries

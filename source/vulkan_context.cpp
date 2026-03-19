@@ -60,10 +60,13 @@ namespace Engine {
       VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
       VkDebugUtilsMessageTypeFlagsEXT messageType,
       const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-      void* pUserData) {
+      void* pUserData)
+  {
+    (void)messageSeverity;
+    (void)messageType;
+    (void)pUserData;
 
     std::print("validation layer: {}\n", pCallbackData->pMessage);
-
     return VK_FALSE;
   }
 
